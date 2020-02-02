@@ -1,0 +1,14 @@
+{
+  "name": "compact-message-format",
+  "version": "0.0.1",
+  "description": "NodeJS Library for serializing/deserializing Flowee's Compact Message Format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jim Hamill (jimtendo@protonmail.com)",
+  "license": "GPL",
+  "dependencies": {
+    "smart-buffer": "^4.1.0"
+  }
+}
