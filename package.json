@@ -6,7 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jim Hamill (jimtendo@protonmail.com)",
+  "keywords": [
+    "flowee",
+    "floweejs",
+    "bitcoincash",
+    "bitcoin",
+    "bch"
+  ],
+  "author": "Jimtendo (jimtendo@protonmail.com)",
   "license": "GPL",
   "dependencies": {
     "smart-buffer": "^4.1.0"
