@@ -17,8 +17,7 @@ const CMFValueType = {
 
 class Message extends Array {
   constructor(...args) { 
-    super(...args); 
-    return this;
+    super(...args);
   }
   
   fromBuffer(buffer) {
@@ -63,7 +62,7 @@ class MessageBuilder {
         break;
       case CMFValueType.ByteArray:
         this._writeVarInt(value.length);
-        this.buffer.writeString(value);
+        this.buffer.writeBuffer(value);
         break;
     }
     
@@ -109,12 +108,14 @@ class MessageBuilder {
   }
   
   _inferType(value) {
-    switch (typeof value) {
-      case "number": return (value < 0) ? CMFValueType.NegativeNumber : CMFValueType.PositiveNumber;
-      case "string": return CMFValueType.String;
-      case "buffer": return CMFValueType.ByteArray;
-      case "boolean": return (value) ? CMFValueType.BoolTrue : CMFValueType.BoolFalse;
-    }
+    if (typeof value === 'number')
+      return (value < 0) ? CMFValueType.NegativeNumber : CMFValueType.PositiveNumber;
+    else if (typeof value === 'string')
+      return CMFValueType.String;
+    else if (typeof value === 'boolean')
+      return (value) ? CMFValueType.BoolTrue : CMFValueType.BoolFalse;
+    else if (value instanceof Buffer)
+      return CMFValueType.ByteArray;
   }
 }
 
@@ -143,9 +144,14 @@ class MessageParser {
         token.value = this._readVarInt();
       }
       
-      else if (token.type === CMFValueType.String || token.type === CMFValueType.ByteArray) {
+      else if (token.type === CMFValueType.String) {
         let length = this._readVarInt();
         token.value = this.buffer.readString(length);
+      }
+      
+      else if (token.type === CMFValueType.ByteArray) {
+        let length = this._readVarInt();
+        token.value = this.buffer.readBuffer(length);
       }
       
       else if (token.type === CMFValueType.BoolTrue) {
