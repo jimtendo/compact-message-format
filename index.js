@@ -13,6 +13,7 @@ const CMFValueType = {
   ByteArray:          3, // Identical to string, but without encoding
   BoolTrue:           4, // Not followed with any bytes
   BoolFalse:          5, // Not followed with any bytes
+  Double:             6, // 8 Bye Little Endian Double
 }
 
 class Message extends Array {
@@ -64,6 +65,9 @@ class MessageBuilder {
         this._writeVarInt(value.length);
         this.buffer.writeBuffer(value);
         break;
+      case CMFValueType.Double:
+        this.buffer.writeDoubleLE(value);
+        break;
     }
     
     return this;
@@ -108,8 +112,10 @@ class MessageBuilder {
   }
   
   _inferType(value) {
-    if (typeof value === 'number')
+    if (Number.isInteger(value))
       return (value < 0) ? CMFValueType.NegativeNumber : CMFValueType.PositiveNumber;
+    else if (typeof value === 'number')
+      return CMFValueType.Double;
     else if (typeof value === 'string')
       return CMFValueType.String;
     else if (typeof value === 'boolean')
@@ -162,8 +168,12 @@ class MessageParser {
         token.value = false;
       }
       
+      else if (token.type === CMFValueType.Double) {
+        token.value = this.buffer.readDoubleLE();
+      }
+      
       else {
-        token.value = null;
+        token.value = "UNSUPPORTED";
       }
       
       return token;
