@@ -21,15 +21,16 @@ class Message extends Array {
     super(...args);
   }
   
-  fromBuffer(buffer) {
+  static fromBuffer(buffer) {
+    let msg = new Message();
     let parser = new MessageParser(buffer);
     while (true) {
       let tag = parser.next();
       if (!tag) break; 
-      this.push(tag);
+      msg.push(tag);
     }
     
-    return this;
+    return msg;
   }
   
   toBuffer(buffer) {

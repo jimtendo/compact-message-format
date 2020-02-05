@@ -1,6 +1,6 @@
 {
   "name": "compact-message-format",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "NodeJS Library for serializing/deserializing Flowee's Compact Message Format",
   "main": "index.js",
   "scripts": {
